@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+  # Allows for manual triggering of the workflow
+  workflow_dispatch:
+
 jobs:
   deploy_dev:
     name: Deploy to Dev
@@ -32,10 +35,23 @@ jobs:
           # Deploy to your Dev environment (e.g., SSH, cloud CLI, etc.)
           echo "Deploying to Dev environment..."
 
+  review_dev:
+    name: Manual Approval for Stage Deployment
+    runs-on: ubuntu-latest
+    needs: deploy_dev
+    if: ${{ success() }}
+    steps:
+      - name: Awaiting approval to proceed to Stage
+        run: echo "Waiting for manual approval to deploy to Stage..."
+      - name: Approval step
+        uses: hmarr/approve-action@v2
+        with:
+          message: "Approve to deploy to Stage"
+
   deploy_stage:
     name: Deploy to Stage
     runs-on: ubuntu-latest
-    needs: deploy_dev # Runs only if 'deploy_dev' succeeds
+    needs: review_dev # Runs only if 'review_dev' succeeds
 
     steps:
       - name: Check out code
@@ -59,10 +75,23 @@ jobs:
           # Deploy to your Stage environment
           echo "Deploying to Stage environment..."
 
+  review_stage:
+    name: Manual Approval for Prod Deployment
+    runs-on: ubuntu-latest
+    needs: deploy_stage
+    if: ${{ success() }}
+    steps:
+      - name: Awaiting approval to proceed to Prod
+        run: echo "Waiting for manual approval to deploy to Prod..."
+      - name: Approval step
+        uses: hmarr/approve-action@v2
+        with:
+          message: "Approve to deploy to Prod"
+
   deploy_prod:
     name: Deploy to Prod
     runs-on: ubuntu-latest
-    needs: deploy_stage # Runs only if 'deploy_stage' succeeds
+    needs: review_stage # Runs only if 'review_stage' succeeds
 
     steps:
       - name: Check out code
