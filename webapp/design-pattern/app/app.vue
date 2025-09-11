@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const message = ref('Hello from Parent!')
-provide('sharedMessage', message)
+provide('sharedMessage', readonly(message))
 </script>
 
 <template>
