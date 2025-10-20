@@ -4,7 +4,11 @@ import { countKey } from '@/utils/keys'
 
 const count = ref(0)
 
-provide(countKey, count)
+provide(countKey, { count, increment })
+
+function increment() {
+    count.value++
+}
 </script>
 
 <template>

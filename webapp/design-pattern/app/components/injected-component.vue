@@ -1,14 +1,16 @@
 <script lang="ts" setup>
+import { inject } from 'vue'
 import { countKey } from '@/utils/keys'
 
-const count = inject(countKey)
-if (!count) throw new Error('count not provided')
+const injected = inject(countKey)
+if (!injected) throw new Error('count not provided')
 
+const { count, increment } = injected
 </script>
 
 <template>
   <div>
     {{ count }}
-    <UButton @click="count++">Add count</UButton>
+    <UButton @click="increment">Add count</UButton>
   </div>
 </template>
