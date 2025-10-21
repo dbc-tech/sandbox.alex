@@ -4,3 +4,5 @@ export interface CountContext {
 }
 
 export const countKey: InjectionKey<CountContext> = Symbol('count')
+
+export const countStringKey = Symbol('countStringKey')

@@ -1,3 +1,18 @@
+<script lang="ts" setup>
+
+import { countStringKey } from '@/utils/keys'
+
+const count = ref('this is a string')
+
+provide(countStringKey, { count, changeString })
+
+function changeString() {
+    count.value = "new string"
+}
+</script>
+
 <template>
-  <h1>Index page</h1>
+  <div>
+    <InjectedComponent />
+  </div>
 </template>
